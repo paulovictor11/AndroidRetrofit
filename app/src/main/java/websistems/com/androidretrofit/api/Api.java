@@ -3,9 +3,11 @@ package websistems.com.androidretrofit.api;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 import websistems.com.androidretrofit.models.DefaultResponse;
 import websistems.com.androidretrofit.models.LoginResponse;
+import websistems.com.androidretrofit.models.UsersResponse;
 
 public interface Api {
 
@@ -24,4 +26,7 @@ public interface Api {
             @Field("email") String email,
             @Field("password") String pass
     );
+
+    @GET("allusers")
+    Call<UsersResponse> getUsers();
 }
