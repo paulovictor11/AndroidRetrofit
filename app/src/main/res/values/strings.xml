@@ -17,4 +17,5 @@
     <string name="currentPassword">Current Password</string>
     <string name="newPassword">New Password</string>
     <string name="logout">Logout</string>
+    <string name="delete">Delete Profile</string>
 </resources>

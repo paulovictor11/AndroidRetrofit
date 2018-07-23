@@ -124,7 +124,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="5dp"
             android:background="@color/colorDanger"
-            android:text="@string/logout"
+            android:text="@string/delete"
             android:textAllCaps="false"
             android:textColor="@color/colorFormBackground"/>
         

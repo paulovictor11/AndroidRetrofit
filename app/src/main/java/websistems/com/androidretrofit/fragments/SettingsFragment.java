@@ -16,6 +16,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import websistems.com.androidretrofit.R;
 import websistems.com.androidretrofit.api.RetrofitClient;
+import websistems.com.androidretrofit.models.DefaultResponse;
 import websistems.com.androidretrofit.models.LoginResponse;
 import websistems.com.androidretrofit.models.User;
 import websistems.com.androidretrofit.storage.SharedPrefManager;
@@ -59,6 +60,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener{
                 break;
 
             case R.id.btnLogout:
+
                 break;
 
             case R.id.btnDelete:
@@ -124,8 +126,53 @@ public class SettingsFragment extends Fragment implements View.OnClickListener{
     }
 
     private void updatePassword() {
+        String currentPassword = edtCurrentePassword.getText().toString().trim();
+        String newPassword = edtNewPassword.getText().toString().trim();
+
+        if (currentPassword.isEmpty()){
+            edtCurrentePassword.setError("Password required");
+            edtCurrentePassword.requestFocus();
+            return;
+        }
+
+        if (currentPassword.length() < 6){
+            edtCurrentePassword.setError("Password should be atleast 6 character long");
+            edtCurrentePassword.requestFocus();
+            return;
+        }
+
+        if (newPassword.isEmpty()){
+            edtNewPassword.setError("Password required");
+            edtNewPassword.requestFocus();
+            return;
+        }
+
+        if (newPassword.length() < 6){
+            edtNewPassword.setError("Password should be atleast 6 character long");
+            edtNewPassword.requestFocus();
+            return;
+        }
+
         User user = SharedPrefManager.getInstance(getActivity()).getUser();
 
+        Call<DefaultResponse> call= RetrofitClient
+                .getInstance()
+                .getApi()
+                .updatePassword(
+                        currentPassword,
+                        newPassword,
+                        user.getEmail()
+                );
+        call.enqueue(new Callback<DefaultResponse>() {
+            @Override
+            public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+                Toast.makeText(getActivity(), response.body().getMsg(), Toast.LENGTH_SHORT).show();
+            }
 
+            @Override
+            public void onFailure(Call<DefaultResponse> call, Throwable t) {
+
+            }
+        });
     }
 }
