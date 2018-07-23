@@ -1,10 +1,12 @@
 package websistems.com.androidretrofit.fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import websistems.com.androidretrofit.R;
 import websistems.com.androidretrofit.activities.LoginActivity;
+import websistems.com.androidretrofit.activities.MainActivity;
 import websistems.com.androidretrofit.activities.ProfileActivity;
 import websistems.com.androidretrofit.api.RetrofitClient;
 import websistems.com.androidretrofit.models.DefaultResponse;
@@ -67,6 +70,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener{
                 break;
 
             case R.id.btnDelete:
+                deleteUser();
                 break;
         }
     }
@@ -184,5 +188,45 @@ public class SettingsFragment extends Fragment implements View.OnClickListener{
         Intent intent = new Intent(getActivity(), LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+    }
+
+    private void deleteUser(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Are you sure??");
+        builder.setMessage("This action is irreversible...");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                User user = SharedPrefManager.getInstance(getActivity()).getUser();
+                Call<DefaultResponse> call = RetrofitClient.getInstance().getApi().deleteUser(user.getId());
+                call.enqueue(new Callback<DefaultResponse>() {
+                    @Override
+                    public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
+                        if (!response.body().isErr()){
+                            SharedPrefManager.getInstance(getActivity()).clear();
+                            Intent intent = new Intent(getActivity(), MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        }
+
+                        Toast.makeText(getActivity(), response.body().getMsg(), Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<DefaultResponse> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

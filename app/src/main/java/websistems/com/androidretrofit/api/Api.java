@@ -1,6 +1,7 @@
 package websistems.com.androidretrofit.api;
 
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -47,5 +48,10 @@ public interface Api {
             @Field("currentPassword") String currentPassword,
             @Field("newPassword") String newPassword,
             @Field("email") String email
+    );
+
+    @DELETE("deleteuser/{id}")
+    Call<DefaultResponse> deleteUser(
+            @Path("id") int id
     );
 }
