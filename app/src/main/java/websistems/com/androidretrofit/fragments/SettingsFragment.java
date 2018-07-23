@@ -1,5 +1,6 @@
 package websistems.com.androidretrofit.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +16,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import websistems.com.androidretrofit.R;
+import websistems.com.androidretrofit.activities.LoginActivity;
+import websistems.com.androidretrofit.activities.ProfileActivity;
 import websistems.com.androidretrofit.api.RetrofitClient;
 import websistems.com.androidretrofit.models.DefaultResponse;
 import websistems.com.androidretrofit.models.LoginResponse;
@@ -60,7 +63,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener{
                 break;
 
             case R.id.btnLogout:
-
+                logout();
                 break;
 
             case R.id.btnDelete:
@@ -174,5 +177,12 @@ public class SettingsFragment extends Fragment implements View.OnClickListener{
 
             }
         });
+    }
+
+    private void logout() {
+        SharedPrefManager.getInstance(getActivity()).clear();
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 }
