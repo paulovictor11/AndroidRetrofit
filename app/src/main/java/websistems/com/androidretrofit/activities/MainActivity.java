@@ -110,9 +110,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (response.code() == 201){
                     DefaultResponse dr = response.body();
                     Toast.makeText(MainActivity.this, dr.getMsg(), Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
                 } else if (response.code() == 422){
                     Toast.makeText(MainActivity.this, "User Already Exists", Toast.LENGTH_LONG).show();
                 }
